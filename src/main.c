@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <signal.h>
+#include "crawler.h"
 
 GtkBuilder      *builder; 
 
@@ -29,11 +30,21 @@ void on_window_main_destroy()
 }
 
 // called when file chosen
-
 void on_file_select_file_set(GtkFileChooser *chooser)
 {
-    gchar* str = gtk_file_chooser_get_uri(chooser);
     
     GtkStack * stack = GTK_STACK(gtk_builder_get_object(builder, "side_bar"));
     gtk_stack_set_visible_child_name(stack, "file_tree");
+    gchar* dir = gtk_file_chooser_get_uri(chooser);
+    get_all_dirs(dir); // this will return all the file in the directory
+
+} 
+
+void populate_file_tree(GtkTreeView tree)
+{
+    // use vals from get_all_dirs to create file tree
+    //
+    
+    
+    
 }
