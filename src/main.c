@@ -1,22 +1,20 @@
 #include <gtk/gtk.h>
-#include <signal.h>
-#include "crawler.h"
-
-GtkBuilder      *builder; 
 
 int main(int argc, char *argv[])
 {
     GtkWidget       *window;
-
+    GtkBuilder      *builder;
+    
     gtk_init(&argc, &argv);
     builder = gtk_builder_new_from_file("glade/window_main.glade");
 
-    window = GTK_WIDGET(gtk_builder_get_object(builder, "window_main"));
+    window = GTK_WIDGET(gtk_builder_get_object(builder, "window_main"));  
     gtk_builder_connect_signals(builder, NULL);
 
-    //g_object_unref(builder);
-
-    gtk_widget_show(window);                
+    gtk_widget_show(window); 
+   
+    g_object_unref(builder);
+            
     gtk_main();
 
     return 0;
@@ -29,22 +27,3 @@ void on_window_main_destroy()
     gtk_main_quit();
 }
 
-// called when file chosen
-void on_file_select_file_set(GtkFileChooser *chooser)
-{
-    
-    GtkStack * stack = GTK_STACK(gtk_builder_get_object(builder, "side_bar"));
-    gtk_stack_set_visible_child_name(stack, "file_tree");
-    gchar* dir = gtk_file_chooser_get_uri(chooser);
-    get_all_dirs(dir); // this will return all the file in the directory
-
-} 
-
-void populate_file_tree(GtkTreeView tree)
-{
-    // use vals from get_all_dirs to create file tree
-    //
-    
-    
-    
-}

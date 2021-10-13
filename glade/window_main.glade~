@@ -17,6 +17,7 @@
             <property name="height-request">800</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="input-purpose">alpha</property>
           </object>
           <packing>
             <property name="y">34</property>

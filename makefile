@@ -1,4 +1,4 @@
-TARGET=text_editor
+TARGET=TEA
 
 # compiler
 CC=gcc
@@ -19,15 +19,12 @@ GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
 LD=gcc
 LDFLAGS=$(PTHREAD) $(GTKLIB) -export-dynamic
 
-OBJS=    main.o    crawler.o
+OBJS=    main.o
 
 all: $(OBJS)
 	$(LD) -o $(TARGET) $(OBJS) $(LDFLAGS)
-	
-crawler.o: src/crawler.c src/crawler.h
-	$(CC) -c src/crawler.c 
-    
-main.o: src/main.c src/crawler.h
+
+main.o: src/main.c 
 	$(CC) -c $(CCFLAGS) src/main.c $(GTKLIB) -o main.o
 		    
 clean:
