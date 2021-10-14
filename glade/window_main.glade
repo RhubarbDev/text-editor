@@ -7,16 +7,20 @@
     <property name="resizable">False</property>
     <property name="default-width">700</property>
     <property name="default-height">800</property>
+    <signal name="destroy" handler="on_window_main_destroy" swapped="no"/>
     <child>
       <object class="GtkFixed">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <child>
-          <object class="GtkTextView">
+          <object class="GtkTextView" id="text_space">
             <property name="width-request">700</property>
             <property name="height-request">800</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="double-buffered">False</property>
+            <property name="wrap-mode">word</property>
+            <property name="indent">4</property>
           </object>
           <packing>
             <property name="y">34</property>
