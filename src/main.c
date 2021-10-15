@@ -1,12 +1,14 @@
 #include <gtk/gtk.h>
+#include "save.h"
+#include <stdio.h>
 
 void css_set(GtkCssProvider * provider, GtkWidget *g_widget);
 
+GtkWidget	*textview;
+
 int main(int argc, char *argv[])
 {
-    GtkWidget       *window;
-    GtkWidget       *textview;
-   
+    GtkWidget       *window; 
     GtkBuilder      *builder;
     
     gtk_init(&argc, &argv);
@@ -34,6 +36,17 @@ void on_window_main_destroy()
 {
     // save file here <---
     gtk_main_quit();
+}
+
+void on_saveopen_button_clicked()
+{
+    GtkTextIter start, end;
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
+    char *text;
+    gtk_text_buffer_get_bounds(buffer, &start, &end);
+    text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+    char path[9] = "test.txt\0"; // placeholder 
+    save_file(text, path);
 }
 
 void css_set(GtkCssProvider * cssProvider, GtkWidget *g_widget)

@@ -19,12 +19,15 @@ GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
 LD=gcc
 LDFLAGS=$(PTHREAD) $(GTKLIB) -export-dynamic
 
-OBJS=    main.o
+OBJS=    main.o    save.o
 
 all: $(OBJS)
 	$(LD) -o $(TARGET) $(OBJS) $(LDFLAGS)
+	
+save.o: src/save.c src/save.h
+	$(CC) -c src/save.c
 
-main.o: src/main.c 
+main.o: src/main.c src/save.h
 	$(CC) -c $(CCFLAGS) src/main.c $(GTKLIB) -o main.o
 		    
 clean:
