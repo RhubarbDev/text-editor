@@ -4,7 +4,11 @@
 
 void css_set(GtkCssProvider * provider, GtkWidget *g_widget);
 
+typedef enum { false, true } bool;
+
 GtkWidget	*textview;
+GtkWidget	*saveopen_button;
+GtkWidget	*file_label;
 
 int main(int argc, char *argv[])
 {
@@ -15,9 +19,13 @@ int main(int argc, char *argv[])
     builder = gtk_builder_new_from_file("glade/window_main.glade");
     
     textview = GTK_WIDGET(gtk_builder_get_object(builder, "text_space"));
+    saveopen_button = GTK_WIDGET(gtk_builder_get_object(builder, "saveopen_button"));
+    file_label = GTK_WIDGET(gtk_builder_get_object(builder, "file_label"));
     
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window_main"));  
     gtk_builder_connect_signals(builder, NULL);
+    
+    gtk_button_set_label(saveopen_button, "Open");
        
     GtkCssProvider *provider = gtk_css_provider_new ();
     gtk_css_provider_load_from_path(provider, "glade/theme.css", NULL);
@@ -38,6 +46,14 @@ void on_window_main_destroy()
     gtk_main_quit();
 }
 
+bool file = false; // if text file empty 
+
+void on_textbuffer_changed()
+{
+    if (!file) { gtk_button_set_label(saveopen_button, "Save"); file = true; }
+    // scan text and syntax highlight
+}
+
 void on_saveopen_button_clicked()
 {
     GtkTextIter start, end;
@@ -45,8 +61,9 @@ void on_saveopen_button_clicked()
     char *text;
     gtk_text_buffer_get_bounds(buffer, &start, &end);
     text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-    char path[9] = "test.txt\0"; // placeholder 
+    char path[9] = "test.txt\0"; // placeholder
     save_file(text, path);
+    gtk_label_set_text(file_label, path);
 }
 
 void css_set(GtkCssProvider * cssProvider, GtkWidget *g_widget)

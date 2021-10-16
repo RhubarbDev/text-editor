@@ -31,4 +31,4 @@ main.o: src/main.c src/save.h
 	$(CC) -c $(CCFLAGS) src/main.c $(GTKLIB) -o main.o
 		    
 clean:
-	rm -f *.o $(TARGET)
+	rm -f *.o *.txt $(TARGET)

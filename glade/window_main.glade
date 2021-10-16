@@ -2,6 +2,9 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkTextBuffer" id="textbuffer">
+    <signal name="changed" handler="on_textbuffer_changed" swapped="no"/>
+  </object>
   <object class="GtkWindow" id="window_main">
     <property name="can-focus">False</property>
     <property name="resizable">False</property>
@@ -19,8 +22,9 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="double-buffered">False</property>
-            <property name="wrap-mode">word</property>
+            <property name="wrap-mode">word-char</property>
             <property name="indent">4</property>
+            <property name="buffer">textbuffer</property>
           </object>
           <packing>
             <property name="y">34</property>
@@ -51,7 +55,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="file_label">
             <property name="width-request">500</property>
             <property name="height-request">35</property>
             <property name="visible">True</property>
