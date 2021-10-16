@@ -9,6 +9,8 @@ typedef enum { false, true } bool;
 GtkWidget	*textview;
 GtkWidget	*saveopen_button;
 GtkWidget	*file_label;
+GtkWidget	*opendialog;
+GtkWidget	*savedialog;
 
 int main(int argc, char *argv[])
 {
@@ -21,7 +23,7 @@ int main(int argc, char *argv[])
     textview = GTK_WIDGET(gtk_builder_get_object(builder, "text_space"));
     saveopen_button = GTK_WIDGET(gtk_builder_get_object(builder, "saveopen_button"));
     file_label = GTK_WIDGET(gtk_builder_get_object(builder, "file_label"));
-    
+        
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window_main"));  
     gtk_builder_connect_signals(builder, NULL);
     
@@ -31,6 +33,9 @@ int main(int argc, char *argv[])
     gtk_css_provider_load_from_path(provider, "glade/theme.css", NULL);
    
     css_set(provider, textview);
+    
+    opendialog = gtk_file_chooser_dialog_new ("Open File", window, GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+    savedialog = gtk_file_chooser_dialog_new ("Save File", window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
     
     gtk_widget_show(window); 
     g_object_unref(builder);
@@ -54,16 +59,50 @@ void on_textbuffer_changed()
     // scan text and syntax highlight
 }
 
-void on_saveopen_button_clicked()
+void open_file_helper(char *path)
+{
+    printf(path); // placeholder
+}
+
+void save_file_helper(char *path)
 {
     GtkTextIter start, end;
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);
     char *text;
     gtk_text_buffer_get_bounds(buffer, &start, &end);
     text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-    char path[9] = "test.txt\0"; // placeholder
     save_file(text, path);
     gtk_label_set_text(file_label, path);
+}
+
+void on_saveopen_button_clicked()
+{
+    char *label = gtk_button_get_label(saveopen_button);
+    if (strcmp(label, "Open") == 0){
+    	if (gtk_dialog_run (GTK_DIALOG (opendialog)) == GTK_RESPONSE_ACCEPT)
+    	{
+    	    char *filepath;
+    	    filepath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (opendialog));
+    	    open_file_helper(filepath);
+    	    g_free(filepath);
+    	}
+    	gtk_widget_destroy(opendialog);
+    }
+    
+    if (strcmp(label, "Save") == 0){
+        if (gtk_dialog_run (GTK_DIALOG (savedialog)) == GTK_RESPONSE_ACCEPT)
+        {
+            char *filepath;
+            filepath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (savedialog));
+            save_file_helper(filepath);
+            g_free(filepath);
+        }
+        gtk_widget_destroy(savedialog);
+    
+    
+    }
+    
+
 }
 
 void css_set(GtkCssProvider * cssProvider, GtkWidget *g_widget)

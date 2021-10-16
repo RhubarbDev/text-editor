@@ -22,7 +22,7 @@ LDFLAGS=$(PTHREAD) $(GTKLIB) -export-dynamic
 OBJS=    main.o    save.o
 
 all: $(OBJS)
-	$(LD) -o $(TARGET) $(OBJS) $(LDFLAGS)
+	$(LD) -o $(TARGET) $(OBJS) $(LDFLAGS) -no-pie
 	
 save.o: src/save.c src/save.h
 	$(CC) -c src/save.c
@@ -31,4 +31,4 @@ main.o: src/main.c src/save.h
 	$(CC) -c $(CCFLAGS) src/main.c $(GTKLIB) -o main.o
 		    
 clean:
-	rm -f *.o *.txt $(TARGET)
+	rm -f *.o $(TARGET)
