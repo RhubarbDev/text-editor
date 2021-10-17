@@ -75,6 +75,8 @@ void save_file_helper(char *path)
     gtk_label_set_text(file_label, path);
 }
 
+bool hasfile = false;
+
 void on_saveopen_button_clicked()
 {
     char *label = gtk_button_get_label(saveopen_button);
@@ -90,19 +92,19 @@ void on_saveopen_button_clicked()
     }
     
     if (strcmp(label, "Save") == 0){
-        if (gtk_dialog_run (GTK_DIALOG (savedialog)) == GTK_RESPONSE_ACCEPT)
+    	if (hasfile){
+    	    save_file_helper(gtk_label_get_text(file_label));
+    	}
+        else if (gtk_dialog_run (GTK_DIALOG (savedialog)) == GTK_RESPONSE_ACCEPT)
         {
             char *filepath;
             filepath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (savedialog));
             save_file_helper(filepath);
             g_free(filepath);
+            gtk_widget_destroy(savedialog);
+            hasfile = true;
         }
-        gtk_widget_destroy(savedialog);
-    
-    
     }
-    
-
 }
 
 void css_set(GtkCssProvider * cssProvider, GtkWidget *g_widget)
