@@ -11,10 +11,10 @@ GtkWidget	*saveopen_button;
 GtkWidget	*file_label;
 GtkWidget	*opendialog;
 GtkWidget	*savedialog;
+GtkWidget	*window;
 
 int main(int argc, char *argv[])
 {
-    GtkWidget       *window; 
     GtkBuilder      *builder;
     
     gtk_init(&argc, &argv);
@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
    
     css_set(provider, textview);
     
-    opendialog = gtk_file_chooser_dialog_new ("Open File", window, GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
     savedialog = gtk_file_chooser_dialog_new ("Save File", window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+    opendialog = gtk_file_chooser_dialog_new ("Open File", window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
     
     gtk_widget_show(window); 
     g_object_unref(builder);
@@ -61,7 +61,10 @@ void on_textbuffer_changed()
 
 void open_file_helper(char *path)
 {
-    printf(path); // placeholder
+    // get file
+    // get text in file
+    // put text from file in textview
+    gtk_label_set_text(file_label, path);
 }
 
 void save_file_helper(char *path)
@@ -77,32 +80,51 @@ void save_file_helper(char *path)
 
 bool hasfile = false;
 
-void on_saveopen_button_clicked()
+void on_saveopen_button_clicked(GtkWidget *call)
 {
     char *label = gtk_button_get_label(saveopen_button);
-    if (strcmp(label, "Open") == 0){
-    	if (gtk_dialog_run (GTK_DIALOG (opendialog)) == GTK_RESPONSE_ACCEPT)
-    	{
-    	    char *filepath;
-    	    filepath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (opendialog));
-    	    open_file_helper(filepath);
-    	    g_free(filepath);
-    	}
-    	gtk_widget_destroy(opendialog);
-    }
-    
     if (strcmp(label, "Save") == 0){
     	if (hasfile){
     	    save_file_helper(gtk_label_get_text(file_label));
     	}
-        else if (gtk_dialog_run (GTK_DIALOG (savedialog)) == GTK_RESPONSE_ACCEPT)
+    	else{
+    	    gint res;
+    	    res = gtk_dialog_run(GTK_DIALOG(savedialog));
+    	    if (res == GTK_RESPONSE_ACCEPT)
+    	    {
+    	        char *filepath;
+    	        GtkFileChooser *chooser = GTK_FILE_CHOOSER(savedialog);
+    	        filepath = gtk_file_chooser_get_filename(chooser);
+    	        save_file_helper(filepath);
+    	        g_free(filepath);
+    	        gtk_widget_destroy(savedialog);
+    	        hasfile = true;
+    	    }
+    	    else
+    	    {
+    	        gtk_widget_destroy(savedialog);
+    	        savedialog = gtk_file_chooser_dialog_new ("Save File", window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+    	    }
+    	}
+    }
+    else if (strcmp(label, "Open") == 0){
+        gint res;
+        res = gtk_dialog_run(GTK_DIALOG(opendialog));
+        if (res == GTK_RESPONSE_ACCEPT)
         {
             char *filepath;
-            filepath = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (savedialog));
-            save_file_helper(filepath);
+            GtkFileChooser *chooser = GTK_FILE_CHOOSER(opendialog);
+            filepath = gtk_file_chooser_get_filename(chooser);
+            open_file_helper(filepath);
             g_free(filepath);
-            gtk_widget_destroy(savedialog);
+            gtk_widget_destroy(opendialog);
             hasfile = true;
+            gtk_button_set_label(saveopen_button, "Save");
+        }
+        else
+        {
+            gtk_widget_destroy(opendialog);
+            opendialog = gtk_file_chooser_dialog_new ("Open File", window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
         }
     }
 }
