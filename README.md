@@ -3,7 +3,7 @@ A Text Editor [thats] Awesome
 
 #### Planned Features:
 - Opening Files 
-- Saving Files
+- Saving Files :heavy_check_mark:
 - Changing File Name
 - Syntax Highlighting
 - Custom Themes
