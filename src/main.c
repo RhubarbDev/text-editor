@@ -44,13 +44,6 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-// called when window is closed
-void on_window_main_destroy()
-{
-    // save file here <---
-    gtk_main_quit();
-}
-
 bool file = false; // if text file empty 
 
 void on_textbuffer_changed()
@@ -81,6 +74,12 @@ void save_file_helper(char *path)
     text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
     save_file(text, path);
     gtk_label_set_text(file_label, path);
+}
+
+void on_window_main_destroy()
+{
+    save_file_helper(gtk_label_get_text(file_label));
+    gtk_main_quit();
 }
 
 bool hasfile = false;
