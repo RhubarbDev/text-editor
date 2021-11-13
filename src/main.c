@@ -60,10 +60,15 @@ void on_textbuffer_changed()
 }
 
 void open_file_helper(char *path)
-{
-    // get file
-    // get text in file
-    // put text from file in textview
+{ 
+    GtkTextBuffer *buffer = gtk_text_view_get_buffer(textview);    
+    FILE *file = fopen(path, "r");
+    char *line[256];
+    
+    while (fgets(line, sizeof(line), file)) {
+    	gtk_text_buffer_insert_at_cursor(buffer, line, -1);
+    }
+    
     gtk_label_set_text(file_label, path);
 }
 
