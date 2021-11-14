@@ -11,3 +11,13 @@ A Text Editor [thats] Awesome
 - Optional Features that can be toggled in the settings menu
 - Multiple Files Open At Once
 - ???
+
+## How to Compile:
+
+#### Linux:
+```
+sudo apt-get update
+sudo apt-get install build-essential
+sudo apt-get install libgtk-3-dev
+make
+```
