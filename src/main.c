@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     
     savedialog = gtk_file_chooser_dialog_new ("Save File", window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
     opendialog = gtk_file_chooser_dialog_new ("Open File", window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-    
+
     gtk_widget_show(window); 
     g_object_unref(builder);
             
@@ -48,7 +48,7 @@ bool file = false; // if text file empty
 
 void on_textbuffer_changed()
 {
-    if (!file) { gtk_button_set_label(saveopen_button, "Save"); file = true; }
+    if (!file) { gtk_button_set_label(saveopen_button, "Save"); file = true; gtk_label_set_text(file_label, "Writing New File..."); }
     // scan text and syntax highlight
 }
 
@@ -72,13 +72,17 @@ void save_file_helper(char *path)
     char *text;
     gtk_text_buffer_get_bounds(buffer, &start, &end);
     text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-    save_file(text, path);
+    save_file(text, path, "txt"); // 3rd arg temp
     gtk_label_set_text(file_label, path);
 }
 
 void on_window_main_destroy()
 {
-    save_file_helper(gtk_label_get_text(file_label));
+    if(strcmp(gtk_label_get_text(file_label), "Writing New File...") != 0)
+    {
+	save_file_helper(gtk_label_get_text(file_label)); 
+    }
+
     gtk_main_quit();
 }
 
