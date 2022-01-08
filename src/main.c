@@ -78,9 +78,9 @@ void save_file_helper(char *path)
 
 void on_window_main_destroy()
 {
-    if(strcmp(gtk_label_get_text(file_label), "Writing New File...") != 0)
+    if(strcmp(gtk_label_get_text(file_label), "Writing New File...") != 0 && strcmp(gtk_label_get_text(file_label), "No File Open") != 0)
     {
-	save_file_helper(gtk_label_get_text(file_label)); 
+        save_file_helper(gtk_label_get_text(file_label)); 
     }
 
     gtk_main_quit();
