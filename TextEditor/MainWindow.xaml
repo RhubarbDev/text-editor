@@ -15,17 +15,16 @@
         <!-- title bar -->
         <Grid Grid.Row="0" Name="Header" Background="Transparent" PreviewMouseDown="Header_PreviewMouseDown">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="PathButton" Content="Save" VerticalContentAlignment="Center" FontSize="20" Click="PathButton_Click"/>
-            
-            <Button Grid.Column="2" Content="-" Background="Transparent" BorderThickness="0" FontSize="16" Margin="5 0" Click="Minimize_Click"/>
-            <Button Grid.Column="3" Content="◻" Background="Transparent" BorderThickness="0" FontSize="16" Margin="5 0" Click="Maximize_Click"/>
-            <Button Grid.Column="4" Content="✖" Background="Transparent" BorderThickness="0" FontSize="8" Margin="5 0" Click="Close_Click"/>
+            <ContentControl Grid.Column="1" x:Name="DynamicHeaderContent"/>
+            <Button Grid.Column="2" Content="-" Background="Transparent" VerticalContentAlignment="Center" Width="25" BorderThickness="0" FontSize="16" Margin="5 0" Click="Minimize_Click"/>
+            <Button Grid.Column="3" Content="◻" Background="Transparent" VerticalContentAlignment="Center" Width="25" BorderThickness="0" FontSize="16" Margin="5 0" Click="Maximize_Click"/>
+            <Button Grid.Column="4" Content="✖" Background="Transparent" VerticalContentAlignment="Center" Width="25" BorderThickness="0" FontSize="8" Margin="5 0" Click="Close_Click"/>
         </Grid>
 
         <!-- Main content -->

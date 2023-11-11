@@ -83,17 +83,6 @@ namespace TextEditor
             return editorFile;
         }
 
-
-        private void PathButton_Click(object sender, RoutedEventArgs e)
-        {
-            EditorFile? editorFile = LoadFile();
-            if (editorFile != null)
-            {
-                PathButton.Content = "file";
-                PathButton.IsEnabled = false;
-            }
-        }
-
         private void Minimize_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = System.Windows.WindowState.Minimized;
